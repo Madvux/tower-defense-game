@@ -13,11 +13,14 @@ public class GameScreen extends JPanel {
     private BufferedImage image;
     private ArrayList<BufferedImage> sprites = new ArrayList<>();
 
+
+
     public GameScreen(BufferedImage image) {
         this.image = image;
 
         loadSprites();
         random = new Random();
+
     }
 
     private void loadSprites() {
@@ -33,7 +36,7 @@ public class GameScreen extends JPanel {
 
         for (int y = 0; y < 20; y++) {
             for (int x = 0; x < 20; x++) {
-                graphics.drawImage(sprites.get(getRandomInt()), x*32,y*32,null);
+                graphics.drawImage(sprites.get(getRandomInt()), x * 32, y * 32, null);
             }
         }
     }
