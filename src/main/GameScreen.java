@@ -8,47 +8,28 @@ import java.util.Random;
 
 public class GameScreen extends JPanel {
 
-    private Random random;
+    private Dimension size;
 
-    private BufferedImage image;
-    private ArrayList<BufferedImage> sprites = new ArrayList<>();
+    private Game game;
 
+    public GameScreen(Game game) {
+        this.game = game;
 
-
-    public GameScreen(BufferedImage image) {
-        this.image = image;
-
-        loadSprites();
-        random = new Random();
-
+        setPanelSize();
     }
 
-    private void loadSprites() {
-        for (int y = 0; y < 10; y++) {
-            for (int x = 0; x < 10; x++) {
-                sprites.add(image.getSubimage(x * 32, y * 32, 32, 32));
-            }
-        }
+    private void setPanelSize() {
+        size = new Dimension(640, 640); //20x20 grid 32x32px each chunk
+        setMinimumSize(size);
+        setPreferredSize(size);
+        setMaximumSize(size);
     }
+
 
     public void paint(Graphics graphics) {
         super.paint(graphics);
 
-        for (int y = 0; y < 20; y++) {
-            for (int x = 0; x < 20; x++) {
-                graphics.drawImage(sprites.get(getRandomInt()), x * 32, y * 32, null);
-            }
-        }
+        game.getRender().render(graphics);
     }
 
-    public Color getRandomColor() {
-        int r = random.nextInt(256);
-        int g = random.nextInt(256);
-        int b = random.nextInt(256);
-        return new Color(r, g, b);
-    }
-
-    private int getRandomInt() {
-        return random.nextInt(100);
-    }
 }
