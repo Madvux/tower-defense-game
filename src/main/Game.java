@@ -29,14 +29,13 @@ public class Game extends JFrame implements Runnable {
     private Settings settings;
 
     public Game() {
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-
         initClasses();
 
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
         add(gameScreen);
         pack();
-
         setVisible(true);
     }
 
