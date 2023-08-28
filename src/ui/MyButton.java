@@ -21,6 +21,14 @@ public class MyButton {
         initBounds();
     }
 
+    public boolean isMouseOver() {
+        return mouseOver;
+    }
+
+    public boolean isMousePressed() {
+        return mousePressed;
+    }
+
     //for tile buttons
     public MyButton(int x, int y, int width, int height, String text, int id) {
         this.x = x;

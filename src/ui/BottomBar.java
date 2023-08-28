@@ -13,6 +13,7 @@ public class BottomBar {
     private MyButton bMenu;
     private Playing playing;
 
+    private Tile selectedTile;
     private ArrayList<MyButton> tileButtons = new ArrayList<>();
 
     public BottomBar(int x, int y, int width, int height, Playing playing) {
@@ -32,11 +33,38 @@ public class BottomBar {
     }
 
     private void drawTileButtons(Graphics graphics) {
+
         for (MyButton myButton : tileButtons) {
+
+            //sprite
             graphics.drawImage(getButtonImage(myButton.getId()), myButton.x, myButton.y, myButton.width, myButton.height, null);
+
+            ///mouseOver
+            if (myButton.isMouseOver()) {
+                graphics.setColor(Color.WHITE);
+            } else {
+                graphics.setColor(Color.BLACK);
+            }
+            //border
+            graphics.drawRect(myButton.x, myButton.y, myButton.width, myButton.height);
+
+
+            //mousePressed
+            if (myButton.isMousePressed()) {
+
+                graphics.drawRect(myButton.x + 1, myButton.y + 1, myButton.width - 2, myButton.height - 2);
+                graphics.drawRect(myButton.x + 2, myButton.y + 2, myButton.width - 4, myButton.height - 4);
+            }
+        }
+        drawSelectedTile(graphics);
+    }
+    private void drawSelectedTile(Graphics graphics){
+        if (selectedTile != null) {
+            graphics.drawImage(selectedTile.getSprite(), 550, 650, 50, 50, null);
+            graphics.setColor(Color.BLACK);
+            graphics.drawRect(550,650,50,50);
         }
     }
-
     public BufferedImage getButtonImage(int id) {
         return playing.getTileManager().getSprite(id);
     }
@@ -68,21 +96,53 @@ public class BottomBar {
 
     public void mouseClicked(int x, int y) {
         if (bMenu.getBounds().contains(x, y)) GameStates.setGameState(GameStates.MENU);
+        else {
+            for (MyButton b : tileButtons) {
+                if (b.getBounds().contains(x, y)) {
+                    selectedTile = playing.getTileManager().getTile(b.getId());
+                    playing.setSelectedTile(selectedTile);
+                    return;
+                }
+            }
+        }
     }
 
     public void mouseMoved(int x, int y) {
         bMenu.setMouseOver(false);
-        if (bMenu.getBounds().contains(x, y))
+        for (MyButton b : tileButtons) {
+            b.setMouseOver(false);
+        }
+
+        if (bMenu.getBounds().contains(x, y)) {
             bMenu.setMouseOver(true);
+        } else {
+            for (MyButton b : tileButtons) {
+                if (b.getBounds().contains(x, y)) {
+                    b.setMouseOver(true);
+                    return;
+                }
+            }
+        }
     }
 
     public void mousePressed(int x, int y) {
-        if (bMenu.getBounds().contains(x, y))
+        if (bMenu.getBounds().contains(x, y)) {
             bMenu.setMousePressed(true);
+        } else {
+            for (MyButton b : tileButtons) {
+                if (b.getBounds().contains(x, y)) {
+                    b.setMousePressed(true);
+                    return;
+                }
+            }
+        }
     }
 
     public void mouseReleased(int x, int y) {
         bMenu.resetBooleans();
+        for (MyButton b : tileButtons) {
+            b.resetBooleans();
+        }
     }
 
 }

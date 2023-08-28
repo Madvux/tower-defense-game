@@ -29,6 +29,9 @@ public class TileManager {
         tiles.add(ROAD = new Tile(getSprite(9, 0),id++,"Road"));
     }
 
+    public Tile getTile(int id){
+        return tiles.get(id);
+    }
     public BufferedImage getSprite(int id) {
         return tiles.get(id).getSprite();
     }
