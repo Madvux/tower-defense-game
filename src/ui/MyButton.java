@@ -4,18 +4,36 @@ import java.awt.*;
 
 public class MyButton {
 
-    private int x, y, width, height;
+    public int x, y, width, height;
+    private int id;
     private String text;
     private Rectangle bounds;
     private boolean mouseOver, mousePressed;
 
+    //for normal buttons
     public MyButton(int x, int y, int width, int height, String text) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.text = text;
+        this.id= -1;
         initBounds();
+    }
+
+    //for tile buttons
+    public MyButton(int x, int y, int width, int height, String text, int id) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.text = text;
+        this.id = id;
+        initBounds();
+    }
+
+    public int getId() {
+        return id;
     }
 
     private void initBounds() {
