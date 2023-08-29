@@ -30,16 +30,21 @@ public class Playing extends GameScene implements SceneMethods {
 
 //        LoadSave.createFile();
         createDefaultLevel();
+        loadDefaultLevel();
+    }
+
+    private void loadDefaultLevel() {
+        lvl = LoadSave.getLevelData("new_level");
     }
 
 
-    private void createDefaultLevel(){
+    private void createDefaultLevel() {
 
         int[] array = new int[400];
-        for(int i =0;i<array.length;i++){
-            array[i]=0;
+        for (int i = 0; i < array.length; i++) {
+            array[i] = 0;
         }
-        LoadSave.createLevel("new_level",array);
+        LoadSave.createLevel("new_level", array);
     }
 
     public TileManager getTileManager() {
@@ -121,8 +126,13 @@ public class Playing extends GameScene implements SceneMethods {
     @Override
     public void mouseDragged(int x, int y) {
         if (y >= 640) {
-        }else {
+        } else {
             changeTile(x, y);
         }
+    }
+
+    public void saveLevel() {
+
+        LoadSave.saveLevel("new_level", lvl);
     }
 }
