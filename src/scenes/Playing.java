@@ -7,6 +7,7 @@ import objects.Tile;
 import ui.BottomBar;
 import ui.MyButton;
 import utils.LevelBuild;
+import utils.LoadSave;
 
 import java.awt.*;
 
@@ -26,6 +27,19 @@ public class Playing extends GameScene implements SceneMethods {
         lvl = LevelBuild.getLevelBeta();
         tileManager = new TileManager();
         bottomBar = new BottomBar(0, 640, 640, 100, this);
+
+//        LoadSave.createFile();
+        createDefaultLevel();
+    }
+
+
+    private void createDefaultLevel(){
+
+        int[] array = new int[400];
+        for(int i =0;i<array.length;i++){
+            array[i]=0;
+        }
+        LoadSave.createLevel("new_level",array);
     }
 
     public TileManager getTileManager() {
