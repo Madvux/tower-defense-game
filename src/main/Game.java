@@ -2,9 +2,12 @@ package main;
 
 import inputs.KeyboardListener;
 import inputs.MyMouseListener;
+import managers.TileManager;
+import scenes.Editing;
 import scenes.Menu;
 import scenes.Playing;
 import scenes.Settings;
+import utils.LoadSave;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,14 +24,17 @@ public class Game extends JFrame implements Runnable {
     private final double UPS_SET = 60.0;
 
 
-
     private Render render;
     private Menu menu;
     private Playing playing;
     private Settings settings;
+    private Editing editing;
+
+    private TileManager tileManager;
 
     public Game() {
         initClasses();
+        createDefaultLevel();
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -39,15 +45,14 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void initClasses() {
+        tileManager = new TileManager();
         render = new Render(this);
         gameScreen = new GameScreen(this);
         menu = new Menu(this);
         playing = new Playing(this);
         settings = new Settings(this);
+        editing = new Editing(this);
     }
-
-
-
 
 
     private void start() {
@@ -105,6 +110,15 @@ public class Game extends JFrame implements Runnable {
         }
     }
 
+    private void createDefaultLevel() {
+
+        int[] array = new int[400];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = 0;
+        }
+        LoadSave.createLevel("new_level", array);
+    }
+
     public Render getRender() {
         return render;
     }
@@ -119,5 +133,13 @@ public class Game extends JFrame implements Runnable {
 
     public Settings getSettings() {
         return settings;
+    }
+
+    public Editing getEditing() {
+        return editing;
+    }
+
+    public TileManager getTileManager() {
+        return tileManager;
     }
 }

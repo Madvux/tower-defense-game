@@ -19,16 +19,6 @@ public class LoadSave {
         return image;
     }
 
-    public static void createFile() {
-
-        File txtFile = new File("res/testTextFile.txt");
-
-        try {
-            txtFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void createLevel(String name, int[] idArray) {
         File newLevel = new File("res/" + name + ".txt");
