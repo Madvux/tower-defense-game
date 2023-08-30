@@ -1,7 +1,5 @@
 package main;
 
-import inputs.KeyboardListener;
-import inputs.MyMouseListener;
 import managers.TileManager;
 import scenes.Editing;
 import scenes.Menu;
@@ -9,11 +7,7 @@ import scenes.Playing;
 import scenes.Settings;
 import utils.LoadSave;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class Game extends JFrame implements Runnable {
 
