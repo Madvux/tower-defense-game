@@ -55,7 +55,10 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void updateGame() {
-        //update
+
+        switch (GameStates.gameState){
+            case PLAYING -> playing.update();
+        }
     }
 
     public static void main(String[] args) {

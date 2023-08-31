@@ -1,6 +1,7 @@
 package scenes;
 
 import main.Game;
+import managers.EnemyManager;
 import ui.ActionBar;
 import utils.LoadSave;
 
@@ -13,13 +14,13 @@ public class Playing extends GameScene implements SceneMethods {
     private ActionBar actionBar;
 
     private int mouseX, mouseY;
-
+    private EnemyManager enemyManager;
 
     public Playing(Game game) {
         super(game);
         loadDefaultLevel();
         actionBar = new ActionBar(0, 640, 640, 100, this);
-
+        enemyManager = new EnemyManager(this);
 
     }
 
@@ -32,6 +33,11 @@ public class Playing extends GameScene implements SceneMethods {
     public void render(Graphics graphics) {
         drawLevel(graphics);
         actionBar.draw(graphics);
+        enemyManager.draw(graphics);
+    }
+
+    public void update() {
+        enemyManager.update();
     }
 
     private void drawLevel(Graphics graphics) {
@@ -52,6 +58,8 @@ public class Playing extends GameScene implements SceneMethods {
     public void mouseClicked(int x, int y) {
         if (y >= 640) {
             actionBar.mouseClicked(x, y);
+        }else{
+            enemyManager.addEnemy(x,y);
         }
     }
 
