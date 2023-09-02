@@ -17,24 +17,23 @@ public class Editing extends GameScene implements SceneMethods {
     private int lastTileX, lastTileY, lastTileId;
     private boolean drawSelect;
     private ToolBar toolbar;
-    private int ANIMATION_SPEED = 25;
-
-    private int animationIndex;
-    private int tick;
 
     public Editing(Game game) {
         super(game);
+
         loadDefaultLevel();
         toolbar = new ToolBar(0, 640, 640, 100, this);
     }
 
+    public void update(){
+        updateTick();
+    }
     private void loadDefaultLevel() {
         lvl = LoadSave.getLevelData("new_level");
     }
 
     @Override
     public void render(Graphics g) {
-        updateTick();
 
         drawLevel(g);
         toolbar.draw(g);
@@ -42,15 +41,7 @@ public class Editing extends GameScene implements SceneMethods {
 
     }
 
-    private void updateTick() {
-        tick++;
-        if (tick >= ANIMATION_SPEED) {
-            tick = 0;
-            animationIndex++;
-            if (animationIndex >= 4)
-                animationIndex = 0;
-        }
-    }
+
 
     private void drawLevel(Graphics g) {
         for (int y = 0; y < lvl.length; y++) {
@@ -64,17 +55,9 @@ public class Editing extends GameScene implements SceneMethods {
         }
     }
 
-    private boolean isAnimation(int spriteID) {
-        return game.getTileManager().isSpriteAnimation(spriteID);
-    }
 
-    private BufferedImage getSprite(int spriteID) {
-        return game.getTileManager().getSprite(spriteID);
-    }
 
-    private BufferedImage getSprite(int spriteID, int animationIndex) {
-        return game.getTileManager().getAniSprite(spriteID,animationIndex);
-    }
+
 
     private void drawSelectedTile(Graphics g) {
         if (selectedTile != null && drawSelect) {

@@ -37,6 +37,7 @@ public class Playing extends GameScene implements SceneMethods {
     }
 
     public void update() {
+        updateTick();
         enemyManager.update();
     }
 
@@ -44,22 +45,20 @@ public class Playing extends GameScene implements SceneMethods {
         for (int y = 0; y < lvl.length; y++) {
             for (int x = 0; x < lvl[y].length; x++) {
                 int id = lvl[y][x];
-                graphics.drawImage(getSprite(id), x * 32, y * 32, null);
+                if (isAnimation(id)) {
+                    graphics.drawImage(getSprite(id, animationIndex), x * 32, y * 32, null);
+                } else
+                    graphics.drawImage(getSprite(id), x * 32, y * 32, null);
             }
         }
     }
-
-    private BufferedImage getSprite(int spriteId) {
-        return game.getTileManager().getSprite(spriteId);
-    }
-
 
     @Override
     public void mouseClicked(int x, int y) {
         if (y >= 640) {
             actionBar.mouseClicked(x, y);
         }else{
-            enemyManager.addEnemy(x,y);
+//            enemyManager.addEnemy(x,y);
         }
     }
 
@@ -93,5 +92,15 @@ public class Playing extends GameScene implements SceneMethods {
 
     public void setLevel(int[][] lvl) {
         this.lvl = lvl;
+    }
+
+    public int getTileType(int x, int y) {
+        int xCord = x/32;
+        int yCord = y/32;
+        if(xCord<0 || xCord>19) return 0;
+        if(yCord<0 || yCord>19) return 0;
+
+        int id = lvl[y/32][x/32];
+        return  game.getTileManager().getTile(id).getTileType();
     }
 }
