@@ -2,12 +2,11 @@ package enemies;
 
 import java.awt.*;
 
-import static utils.Constants.Direction.*;
+import static utils.Constants.Directions.*;
 
-public class Enemy {
+public abstract class Enemy {
     private float x, y;
     private Rectangle bounds;
-    private int health;
     private int id;
     private int enemyType;
     private int lastDir;
@@ -19,7 +18,7 @@ public class Enemy {
         this.id = id;
         this.enemyType = enemyType;
         bounds = new Rectangle((int) x, (int) y, 32, 32);
-        lastDir = RIGHT;
+        lastDir = -1;
     }
 
     public void move(float speed, int direction) {
@@ -49,9 +48,6 @@ public class Enemy {
         return bounds;
     }
 
-    public int getHealth() {
-        return health;
-    }
 
     public int getId() {
         return id;

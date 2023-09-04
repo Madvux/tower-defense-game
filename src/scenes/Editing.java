@@ -18,16 +18,19 @@ public class Editing extends GameScene implements SceneMethods {
     private boolean drawSelect;
     private ToolBar toolbar;
 
+
     public Editing(Game game) {
         super(game);
 
         loadDefaultLevel();
-        toolbar = new ToolBar(0, 640, 640, 100, this);
+        toolbar = new ToolBar(0, 640, 640, 160, this);
     }
 
-    public void update(){
+
+    public void update() {
         updateTick();
     }
+
     private void loadDefaultLevel() {
         lvl = LoadSave.getLevelData("new_level");
     }
@@ -42,7 +45,6 @@ public class Editing extends GameScene implements SceneMethods {
     }
 
 
-
     private void drawLevel(Graphics g) {
         for (int y = 0; y < lvl.length; y++) {
             for (int x = 0; x < lvl[y].length; x++) {
@@ -54,9 +56,6 @@ public class Editing extends GameScene implements SceneMethods {
             }
         }
     }
-
-
-
 
 
     private void drawSelectedTile(Graphics g) {

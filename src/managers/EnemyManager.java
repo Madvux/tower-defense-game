@@ -1,11 +1,13 @@
 package managers;
 
-import enemies.Enemy;
+import enemies.*;
 import scenes.Playing;
+import utils.Constants;
 import utils.LoadSave;
 
-import static utils.Constants.Direction.*;
+import static utils.Constants.Directions.*;
 import static utils.Constants.Tiles.*;
+import static utils.Constants.Enemies.*;
 
 
 import java.awt.*;
@@ -21,33 +23,47 @@ public class EnemyManager {
     public EnemyManager(Playing playing) {
         this.playing = playing;
         enemyImages = new BufferedImage[4];
-        addEnemy(3 * 32, 9 * 32);
+        addEnemy(1 * 32, 14 * 32, ORC);
+        addEnemy(3 * 32, 9 * 32, BAT);
+        addEnemy(3 * 32, 9 * 32, KNIGHT);
+        addEnemy(3 * 32, 9 * 32, WOLF);
         loadEnemyImages();
     }
 
     private void loadEnemyImages() {
         BufferedImage atlas = LoadSave.getSpriteAtlas();
-        enemyImages[0] = atlas.getSubimage(0, 32, 32, 32);
-        enemyImages[1] = atlas.getSubimage(32, 32, 32, 32);
-        enemyImages[2] = atlas.getSubimage(2 * 32, 32, 32, 32);
-        enemyImages[3] = atlas.getSubimage(3 * 32, 32, 32, 32);
+
+        for (int i = 0; i < 4; i++) {
+            enemyImages[i] = atlas.getSubimage(i * 32, 32, 32, 32);
+        }
+
     }
 
-    public void addEnemy(int x, int y) {
-        enemies.add(new Enemy(x, y, 0, 0));
+    public void addEnemy(int x, int y, int enemyType) {
+        switch (enemyType) {
+            case ORC -> enemies.add(new Orc(x, y, 0));
+
+            case BAT -> enemies.add(new Bat(x, y, 0));
+
+            case KNIGHT -> enemies.add(new Knight(x, y, 0));
+
+            case WOLF -> enemies.add(new Wolf(x, y, 0));
+
+        }
 
     }
 
     public void update() {
 
         for (Enemy e : enemies) {
-            if (isNextTileRoad(e)) {
-
-            }
+            updateEnemyMove(e);
         }
     }
 
-    public boolean isNextTileRoad(Enemy e) {
+    public void updateEnemyMove(Enemy e) {
+
+        if (e.getLastDir() == -1) setNewDirectionAndMove(e);
+
         int newX = (int) (e.getX() + getSpeedAndWidth(e.getLastDir()));
         int newY = (int) (e.getY() + getSpeedAndHeight(e.getLastDir()));
 
@@ -58,44 +74,37 @@ public class EnemyManager {
         } else {
             setNewDirectionAndMove(e);
         }
-        return false;
     }
 
     private void setNewDirectionAndMove(Enemy e) {
         int dir = e.getLastDir();
-        int xCord = (int) (e.getX()/32);
-        int yCord = (int) (e.getY()/32);
+        int xCord = (int) (e.getX() / 32);
+        int yCord = (int) (e.getY() / 32);
 
-        fixEnemyOffsetTile(e,dir,xCord,yCord);
+        fixEnemyOffsetTile(e, dir, xCord, yCord);
 
         if (dir == LEFT || dir == RIGHT) {
             int newY = (int) (e.getY() + getSpeedAndHeight(UP));
-            if (getTileType((int) e.getX(), newY) == ROAD_TILE) e.move(speed,UP);
-            else e.move(speed,DOWN);
+            if (getTileType((int) e.getX(), newY) == ROAD_TILE) e.move(speed, UP);
+            else e.move(speed, DOWN);
 
-        }else{
+        } else {
             int newX = (int) (e.getX() + getSpeedAndWidth(e.getLastDir()));
-            if (getTileType( newX,(int) e.getY()) == ROAD_TILE) e.move(speed,RIGHT);
-            else e.move(speed,LEFT);
+            if (getTileType(newX, (int) e.getY()) == ROAD_TILE) e.move(speed, RIGHT);
+            else e.move(speed, LEFT);
         }
     }
 
     private void fixEnemyOffsetTile(Enemy e, int dir, int xCord, int yCord) {
-    switch (dir){
-//        case LEFT -> {
-//            if(xCord>0) xCord--;
-//        }
-//        case UP -> {
-//            if(yCord>0) yCord--;
-//        }
-        case RIGHT -> {
-            if(xCord<19) xCord++;
+        switch (dir) {
+            case RIGHT -> {
+                if (xCord < 19) xCord++;
+            }
+            case DOWN -> {
+                if (yCord < 19) yCord++;
+            }
         }
-        case DOWN -> {
-            if(yCord<19) yCord++;
-        }
-    }
-        e.setPosition(xCord*32,yCord*32);
+        e.setPosition(xCord * 32, yCord * 32);
     }
 
     private boolean isAtEnd(Enemy e) {
@@ -126,7 +135,7 @@ public class EnemyManager {
 
     }
 
-    private void drawEnemy(Enemy testEnemy, Graphics g) {
-        g.drawImage(enemyImages[0], (int) testEnemy.getX(), (int) testEnemy.getY(), null);
+    private void drawEnemy(Enemy e, Graphics g) {
+        g.drawImage(enemyImages[e.getEnemyType()], (int) e.getX(), (int) e.getY(), null);
     }
 }

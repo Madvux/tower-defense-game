@@ -25,7 +25,7 @@ public class GameScreen extends JPanel {
     }
 
     private void setPanelSize() {
-        size = new Dimension(640, 740); //20x20 grid 32x32px each chunk
+        size = new Dimension(640, 800); //20x20 grid 32x32px each chunk + room for OptionsBar below
         setMinimumSize(size);
         setPreferredSize(size);
         setMaximumSize(size);
