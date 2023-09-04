@@ -1,6 +1,7 @@
 package managers;
 
 import enemies.*;
+import objects.PathPoint;
 import scenes.Playing;
 import utils.Constants;
 import utils.LoadSave;
@@ -19,15 +20,19 @@ public class EnemyManager {
     private BufferedImage[] enemyImages;
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private float speed = 0.5f;
+    private PathPoint start, end;
 
-    public EnemyManager(Playing playing) {
+    public EnemyManager(Playing playing, PathPoint start, PathPoint end) {
         this.playing = playing;
+        this.start = start;
+        this.end = end;
         enemyImages = new BufferedImage[4];
-        addEnemy(1 * 32, 14 * 32, ORC);
-        addEnemy(3 * 32, 9 * 32, BAT);
-        addEnemy(3 * 32, 9 * 32, KNIGHT);
-        addEnemy(3 * 32, 9 * 32, WOLF);
+        addEnemy(ORC);
+        addEnemy(BAT);
+        addEnemy(KNIGHT);
+        addEnemy(WOLF);
         loadEnemyImages();
+
     }
 
     private void loadEnemyImages() {
@@ -39,7 +44,10 @@ public class EnemyManager {
 
     }
 
-    public void addEnemy(int x, int y, int enemyType) {
+    public void addEnemy(int enemyType) {
+        int x = start.getX()*32;
+        int y = start.getY()*32;
+
         switch (enemyType) {
             case ORC -> enemies.add(new Orc(x, y, 0));
 
@@ -70,7 +78,7 @@ public class EnemyManager {
         if (getTileType(newX, newY) == ROAD_TILE) {
             e.move(speed, e.getLastDir());
         } else if (isAtEnd(e)) {
-            //reached end of path
+            System.out.println("Ouch");
         } else {
             setNewDirectionAndMove(e);
         }
@@ -82,6 +90,7 @@ public class EnemyManager {
         int yCord = (int) (e.getY() / 32);
 
         fixEnemyOffsetTile(e, dir, xCord, yCord);
+        if (isAtEnd(e)) return;
 
         if (dir == LEFT || dir == RIGHT) {
             int newY = (int) (e.getY() + getSpeedAndHeight(UP));
@@ -108,6 +117,7 @@ public class EnemyManager {
     }
 
     private boolean isAtEnd(Enemy e) {
+        if (e.getX() == end.getX()*32 && e.getY()==end.getY()*32) return true;
         return false;
     }
 

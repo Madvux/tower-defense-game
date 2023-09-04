@@ -1,5 +1,7 @@
 package utils;
 
+import objects.PathPoint;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -32,11 +34,11 @@ public class LoadSave {
                 e.printStackTrace();
             }
 
-            writeToFile(newLevel, idArray);
+            writeToFile(newLevel, idArray, new PathPoint(0,0), new PathPoint(0,0) );
         }
     }
 
-    private static void writeToFile(File file, int[] idArray) {
+    private static void writeToFile(File file, int[] idArray, PathPoint start, PathPoint end) {
 
         try {
             PrintWriter printWriter = new PrintWriter(file);
@@ -44,6 +46,10 @@ public class LoadSave {
             for (Integer i : idArray) {
                 printWriter.println(i);
             }
+            printWriter.println(start.getX());
+            printWriter.println(start.getY());
+            printWriter.println(end.getX());
+            printWriter.println(end.getY());
 
             printWriter.close();
         } catch (FileNotFoundException e) {
@@ -71,11 +77,11 @@ public class LoadSave {
         return list;
     }
 
-    public static void saveLevel(String name, int[][] idArray) {
+    public static void saveLevel(String name, int[][] idArray, PathPoint start,PathPoint end) {
 
         File levelFile = new File("res/" + name + ".txt");
         if (levelFile.exists()) {
-            writeToFile(levelFile,twoDTo1DintArray(idArray));
+            writeToFile(levelFile,twoDTo1DintArray(idArray),start,end);
         } else {
             System.out.println("File: " + name + " does not exist");
             return;
@@ -112,6 +118,21 @@ public class LoadSave {
             ArrayList<Integer> list = readFromFile(lvlFile);
             return arrayListTo2DInt(list, 20, 20);
 
+        } else {
+            System.out.println("File: " + name + " does not exist");
+            return null;
+        }
+
+    }
+    public static ArrayList<PathPoint> getLevelPathPoint(String name) {
+        File lvlFile = new File("res/" + name + ".txt");
+        if (lvlFile.exists()) {
+            ArrayList<Integer> list = readFromFile(lvlFile);
+            ArrayList<PathPoint> points = new ArrayList<>();
+            points.add(new PathPoint(list.get(400),list.get(401)));
+            points.add(new PathPoint(list.get(402),list.get(403)));
+
+            return points;
         } else {
             System.out.println("File: " + name + " does not exist");
             return null;

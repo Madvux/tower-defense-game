@@ -2,11 +2,13 @@ package scenes;
 
 import main.Game;
 import managers.EnemyManager;
+import objects.PathPoint;
 import ui.ActionBar;
 import utils.LoadSave;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Playing extends GameScene implements SceneMethods {
 
@@ -15,17 +17,21 @@ public class Playing extends GameScene implements SceneMethods {
 
     private int mouseX, mouseY;
     private EnemyManager enemyManager;
+    private PathPoint start, end;
 
     public Playing(Game game) {
         super(game);
         loadDefaultLevel();
-        actionBar = new ActionBar(0, 640, 640, 100, this);
-        enemyManager = new EnemyManager(this);
+        actionBar = new ActionBar(0, 640, 640, 160, this);
+        enemyManager = new EnemyManager(this,start,end);
 
     }
 
     private void loadDefaultLevel() {
         lvl = LoadSave.getLevelData("new_level");
+        ArrayList<PathPoint> points= LoadSave.getLevelPathPoint("new_level");
+        start = points.get(0);
+        end = points.get(1);
     }
 
 
