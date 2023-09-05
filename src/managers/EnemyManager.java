@@ -19,7 +19,6 @@ public class EnemyManager {
     private Playing playing;
     private BufferedImage[] enemyImages;
     private ArrayList<Enemy> enemies = new ArrayList<>();
-    private float speed = 0.5f;
     private PathPoint start, end;
 
     public EnemyManager(Playing playing, PathPoint start, PathPoint end) {
@@ -72,11 +71,11 @@ public class EnemyManager {
 
         if (e.getLastDir() == -1) setNewDirectionAndMove(e);
 
-        int newX = (int) (e.getX() + getSpeedAndWidth(e.getLastDir()));
-        int newY = (int) (e.getY() + getSpeedAndHeight(e.getLastDir()));
+        int newX = (int) (e.getX() + getSpeedAndWidth(e.getLastDir(),e.getEnemyType()));
+        int newY = (int) (e.getY() + getSpeedAndHeight(e.getLastDir(),e.getEnemyType()));
 
         if (getTileType(newX, newY) == ROAD_TILE) {
-            e.move(speed, e.getLastDir());
+            e.move(GetSpeed(e.getEnemyType()), e.getLastDir());
         } else if (isAtEnd(e)) {
             System.out.println("Ouch");
         } else {
@@ -93,14 +92,14 @@ public class EnemyManager {
         if (isAtEnd(e)) return;
 
         if (dir == LEFT || dir == RIGHT) {
-            int newY = (int) (e.getY() + getSpeedAndHeight(UP));
-            if (getTileType((int) e.getX(), newY) == ROAD_TILE) e.move(speed, UP);
-            else e.move(speed, DOWN);
+            int newY = (int) (e.getY() + getSpeedAndHeight(UP,e.getEnemyType()));
+            if (getTileType((int) e.getX(), newY) == ROAD_TILE) e.move(GetSpeed(e.getEnemyType()), UP);
+            else e.move(GetSpeed(e.getEnemyType()), DOWN);
 
         } else {
-            int newX = (int) (e.getX() + getSpeedAndWidth(e.getLastDir()));
-            if (getTileType(newX, (int) e.getY()) == ROAD_TILE) e.move(speed, RIGHT);
-            else e.move(speed, LEFT);
+            int newX = (int) (e.getX() + getSpeedAndWidth(e.getLastDir(),e.getEnemyType()));
+            if (getTileType(newX, (int) e.getY()) == ROAD_TILE) e.move(GetSpeed(e.getEnemyType()), RIGHT);
+            else e.move(GetSpeed(e.getEnemyType()), LEFT);
         }
     }
 
@@ -125,15 +124,15 @@ public class EnemyManager {
         return playing.getTileType(newX, newY);
     }
 
-    private float getSpeedAndWidth(int direction) {
-        if (direction == LEFT) return -speed;
-        if (direction == RIGHT) return speed + 32;
+    private float getSpeedAndWidth(int direction, int enemyType) {
+        if (direction == LEFT) return -GetSpeed(enemyType);
+        if (direction == RIGHT) return GetSpeed(enemyType) + 32;
         return 0;
     }
 
-    private float getSpeedAndHeight(int direction) {
-        if (direction == UP) return -speed;
-        if (direction == DOWN) return speed + 32;
+    private float getSpeedAndHeight(int direction, int enemyType) {
+        if (direction == UP) return -GetSpeed(enemyType);
+        if (direction == DOWN) return GetSpeed(enemyType) + 32;
         return 0;
     }
 

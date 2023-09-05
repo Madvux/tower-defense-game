@@ -2,6 +2,7 @@ package scenes;
 
 import main.Game;
 import managers.EnemyManager;
+import managers.TowerManager;
 import objects.PathPoint;
 import ui.ActionBar;
 import utils.LoadSave;
@@ -17,19 +18,21 @@ public class Playing extends GameScene implements SceneMethods {
 
     private int mouseX, mouseY;
     private EnemyManager enemyManager;
+    private TowerManager towerManager;
+
     private PathPoint start, end;
 
     public Playing(Game game) {
         super(game);
         loadDefaultLevel();
         actionBar = new ActionBar(0, 640, 640, 160, this);
-        enemyManager = new EnemyManager(this,start,end);
-
+        enemyManager = new EnemyManager(this, start, end);
+        towerManager = new TowerManager(this);
     }
 
     private void loadDefaultLevel() {
         lvl = LoadSave.getLevelData("new_level");
-        ArrayList<PathPoint> points= LoadSave.getLevelPathPoint("new_level");
+        ArrayList<PathPoint> points = LoadSave.getLevelPathPoint("new_level");
         start = points.get(0);
         end = points.get(1);
     }
@@ -40,11 +43,13 @@ public class Playing extends GameScene implements SceneMethods {
         drawLevel(graphics);
         actionBar.draw(graphics);
         enemyManager.draw(graphics);
+        towerManager.draw(graphics);
     }
 
     public void update() {
         updateTick();
         enemyManager.update();
+        towerManager.update();
     }
 
     private void drawLevel(Graphics graphics) {
@@ -63,7 +68,7 @@ public class Playing extends GameScene implements SceneMethods {
     public void mouseClicked(int x, int y) {
         if (y >= 640) {
             actionBar.mouseClicked(x, y);
-        }else{
+        } else {
 //            enemyManager.addEnemy(x,y);
         }
     }
@@ -101,12 +106,12 @@ public class Playing extends GameScene implements SceneMethods {
     }
 
     public int getTileType(int x, int y) {
-        int xCord = x/32;
-        int yCord = y/32;
-        if(xCord<0 || xCord>19) return 0;
-        if(yCord<0 || yCord>19) return 0;
+        int xCord = x / 32;
+        int yCord = y / 32;
+        if (xCord < 0 || xCord > 19) return 0;
+        if (yCord < 0 || yCord > 19) return 0;
 
-        int id = lvl[y/32][x/32];
-        return  game.getTileManager().getTile(id).getTileType();
+        int id = lvl[y / 32][x / 32];
+        return game.getTileManager().getTile(id).getTileType();
     }
 }
