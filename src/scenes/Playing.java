@@ -4,12 +4,15 @@ import main.Game;
 import managers.EnemyManager;
 import managers.TowerManager;
 import objects.PathPoint;
+import objects.Tower;
 import ui.ActionBar;
 import utils.LoadSave;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import static utils.Constants.Tiles.GRASS_TILE;
 
 public class Playing extends GameScene implements SceneMethods {
 
@@ -21,6 +24,7 @@ public class Playing extends GameScene implements SceneMethods {
     private TowerManager towerManager;
 
     private PathPoint start, end;
+    private Tower selectedTower;
 
     public Playing(Game game) {
         super(game);
@@ -44,6 +48,12 @@ public class Playing extends GameScene implements SceneMethods {
         actionBar.draw(graphics);
         enemyManager.draw(graphics);
         towerManager.draw(graphics);
+        drawSelectedTower(graphics);
+    }
+
+    private void drawSelectedTower(Graphics graphics) {
+        if (selectedTower == null) return;
+        graphics.drawImage(towerManager.getTowerImages()[selectedTower.getTowerType()], mouseX, mouseY, null);
     }
 
     public void update() {
@@ -69,8 +79,19 @@ public class Playing extends GameScene implements SceneMethods {
         if (y >= 640) {
             actionBar.mouseClicked(x, y);
         } else {
-//            enemyManager.addEnemy(x,y);
+            if (selectedTower != null) {
+                if (isTileGrass(mouseX, mouseY))
+                    towerManager.addTower(selectedTower, x, y);
+                selectedTower = null;
+            }
         }
+    }
+
+    private boolean isTileGrass(int x, int y) {
+        int id = lvl[y / 32][x / 32];
+        int tileType = game.getTileManager().getTile(id).getTileType();
+
+        return tileType == GRASS_TILE;
     }
 
 
@@ -113,5 +134,13 @@ public class Playing extends GameScene implements SceneMethods {
 
         int id = lvl[y / 32][x / 32];
         return game.getTileManager().getTile(id).getTileType();
+    }
+
+    public TowerManager getTowerManager() {
+        return towerManager;
+    }
+
+    public void setSelectedTower(Tower selectedTower) {
+        this.selectedTower = selectedTower;
     }
 }

@@ -6,24 +6,23 @@ import utils.LoadSave;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import static utils.Constants.Towers.*;
 
 public class TowerManager {
+
     private Playing playing;
     private BufferedImage[] towerImages;
-    private Tower tower;
+    private ArrayList<Tower> towers = new ArrayList<>();
+    private int towerAmount = 0;
 
     public TowerManager(Playing playing) {
         this.playing = playing;
 
         loadTowerImages();
-        initTowers();
     }
 
-    private void initTowers() {
-        tower = new Tower(3 * 23, 6 * 32, 0, ARCHER);
-    }
 
     private void loadTowerImages() {
         BufferedImage atlas = LoadSave.getSpriteAtlas();
@@ -36,10 +35,20 @@ public class TowerManager {
     }
 
     public void draw(Graphics g) {
-        g.drawImage(towerImages[ARCHER], tower.getX(), tower.getY(), null);
+        for(Tower t: towers){
+            g.drawImage(towerImages[t.getTowerType()],t.getX(),t.getY(),null);
+        }
     }
 
     public void update() {
 
+    }
+
+    public BufferedImage[] getTowerImages() {
+        return towerImages;
+    }
+
+    public void addTower(Tower selectedTower, int xPos, int yPos) {
+        towers.add(new Tower(xPos, yPos, towerAmount++, selectedTower.getTowerType()));
     }
 }
