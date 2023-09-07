@@ -4,6 +4,7 @@ import main.GameStates;
 import objects.Tile;
 import objects.Tower;
 import scenes.Playing;
+import utils.Constants;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,6 +16,7 @@ public class ActionBar extends Bar {
 
     private MyButton[] towerButtons;
     private Tower selectedTower;
+    private Tower displayTower;
 
     public ActionBar(int x, int y, int width, int height, Playing playing) {
         super(x, y, width, height);
@@ -58,16 +60,31 @@ public class ActionBar extends Bar {
 
         //buttons
         drawButtons(graphics);
+        drawDisplayTower(graphics);
+    }
+
+    private void drawDisplayTower(Graphics g) {
+        if(displayTower != null){
+            g.setColor(Color.gray);
+            g.fillRect(410,645,220,85);
+            g.setColor(Color.BLACK);
+            g.drawRect(410,645,220,85);
+            g.drawRect(420,650,50,50);
+            g.drawImage(playing.getTowerManager().getTowerImages()[displayTower.getTowerType()], 420,650,50,50,null);
+            g.setFont(new Font("LucidaSans",Font.BOLD,15));
+            g.drawString("" + Constants.Towers.getName(displayTower.getTowerType()),490,660);
+            g.drawString("ID: " + displayTower.getId(),490,675);
+        }
     }
 
 
     public void mouseClicked(int x, int y) {
         if (bMenu.getBounds().contains(x, y)) {
             GameStates.setGameState(GameStates.MENU);
-        }else{
-            for (MyButton b: towerButtons){
-                if (b.getBounds().contains(x,y)){
-                    selectedTower = new Tower(0,0,-1,b.getId());
+        } else {
+            for (MyButton b : towerButtons) {
+                if (b.getBounds().contains(x, y)) {
+                    selectedTower = new Tower(0, 0, -1, b.getId());
                     playing.setSelectedTower(selectedTower);
                     return;
                 }
@@ -106,9 +123,12 @@ public class ActionBar extends Bar {
 
     public void mouseReleased(int x, int y) {
         bMenu.resetBooleans();
-        for(MyButton b: towerButtons){
+        for (MyButton b : towerButtons) {
             b.resetBooleans();
         }
     }
 
+    public void displayTower(Tower t) {
+        displayTower = t;
+    }
 }

@@ -44,5 +44,13 @@ public class Constants {
         public static final int CANNON = 0;
         public static final int ARCHER = 1;
         public static final int WIZARD = 2;
+        public static String getName(int towerType){
+            switch (towerType){
+                case CANNON -> {return "CANNON";}
+                case ARCHER -> {return "ARCHER";}
+                case WIZARD -> {return "WIZARD";}
+            }
+            return "";
+        }
     }
 }

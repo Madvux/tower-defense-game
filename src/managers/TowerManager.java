@@ -35,8 +35,8 @@ public class TowerManager {
     }
 
     public void draw(Graphics g) {
-        for(Tower t: towers){
-            g.drawImage(towerImages[t.getTowerType()],t.getX(),t.getY(),null);
+        for (Tower t : towers) {
+            g.drawImage(towerImages[t.getTowerType()], t.getX(), t.getY(), null);
         }
     }
 
@@ -50,5 +50,13 @@ public class TowerManager {
 
     public void addTower(Tower selectedTower, int xPos, int yPos) {
         towers.add(new Tower(xPos, yPos, towerAmount++, selectedTower.getTowerType()));
+    }
+
+    public Tower getTowerAt(int x, int y) {
+        for (Tower t : towers) {
+            if (t.getX() == x && t.getY() == y) return t;
+        }
+
+        return null;
     }
 }
