@@ -58,6 +58,11 @@ public class Playing extends GameScene implements SceneMethods {
         g.drawRect(mouseX,mouseY,32,32);
     }
 
+    public EnemyManager getEnemyManager() {
+        return enemyManager;
+    }
+
+
     private void drawSelectedTower(Graphics graphics) {
         if (selectedTower == null) return;
         graphics.drawImage(towerManager.getTowerImages()[selectedTower.getTowerType()], mouseX, mouseY, null);

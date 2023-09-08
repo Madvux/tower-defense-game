@@ -1,5 +1,6 @@
 package enemies;
 
+import objects.Tower;
 import utils.Constants;
 
 import java.awt.*;
@@ -13,6 +14,8 @@ public abstract class Enemy {
     private int id;
     private int enemyType;
     private int lastDir;
+    protected boolean alive = true;
+
 
 
     public Enemy(float x, float y, int id, int enemyType) {
@@ -71,5 +74,13 @@ public abstract class Enemy {
 
     public int getLastDir() {
         return lastDir;
+    }
+
+    public void hurt(int dmg) {
+        this.health -= dmg;
+        if(health<=0) alive = false;
+    }
+    public boolean isAlive() {
+        return alive;
     }
 }

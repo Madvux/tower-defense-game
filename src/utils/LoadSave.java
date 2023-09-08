@@ -140,5 +140,9 @@ public class LoadSave {
 
     }
 
+    public static int GetHypoDistance(float x1, float y1, float x2, float y2){
+
+        return (int) Math.hypot(Math.abs(x1-x2),Math.abs(y1-y2));
+    }
 
 }

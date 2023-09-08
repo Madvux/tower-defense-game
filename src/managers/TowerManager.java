@@ -1,5 +1,6 @@
 package managers;
 
+import enemies.Enemy;
 import objects.Tower;
 import scenes.Playing;
 import utils.LoadSave;
@@ -41,7 +42,22 @@ public class TowerManager {
     }
 
     public void update() {
+        attackEnemyIfClose();
+    }
 
+    private void attackEnemyIfClose() {
+        for(Tower t: towers){
+            for(Enemy e: playing.getEnemyManager().getEnemies()){
+                if(e.isAlive()) {
+                    if (isEnemyInRange(t, e)) e.hurt(1);
+                    }
+            }
+        }
+    }
+
+    private boolean isEnemyInRange(Tower t, Enemy e) {
+        int range = LoadSave.GetHypoDistance(t.getX(),t.getY(),e.getX(),e.getY());
+        return range < t.getRange();
     }
 
     public BufferedImage[] getTowerImages() {
