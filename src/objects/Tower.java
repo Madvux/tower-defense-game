@@ -1,13 +1,43 @@
 package objects;
 
+import utils.Constants;
+
 public class Tower {
     private int x,y,id, towerType;
+    private float dmg,range,cooldown;
 
     public Tower(int x, int y, int id, int towerType) {
         this.x = x;
         this.y = y;
         this.id = id;
         this.towerType = towerType;
+        setDefaultDamage();
+        setDefaultRange();
+        setDefaultCooldown();
+    }
+
+    private void setDefaultCooldown() {
+        Constants.Towers.GetDefaultCooldown(towerType);
+    }
+
+    private void setDefaultRange() {
+        Constants.Towers.GetDefaultRange(towerType);
+    }
+
+    private void setDefaultDamage() {
+        Constants.Towers.GetStartDmg(towerType);
+    }
+
+    public float getDmg() {
+        return dmg;
+    }
+
+    public float getRange() {
+        return range;
+    }
+
+    public float getCooldown() {
+        return cooldown;
     }
 
     public int getX() {

@@ -1,14 +1,11 @@
 package ui;
 
 import main.GameStates;
-import objects.Tile;
 import objects.Tower;
 import scenes.Playing;
 import utils.Constants;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class ActionBar extends Bar {
     private MyButton bMenu;
@@ -74,7 +71,14 @@ public class ActionBar extends Bar {
             g.setFont(new Font("LucidaSans",Font.BOLD,15));
             g.drawString("" + Constants.Towers.getName(displayTower.getTowerType()),490,660);
             g.drawString("ID: " + displayTower.getId(),490,675);
+            
+            drawDisplayedTowerBorder(g);
         }
+    }
+
+    private void drawDisplayedTowerBorder(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.drawRect(displayTower.getX(), displayTower.getY(), 32,32);
     }
 
 
