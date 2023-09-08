@@ -9,7 +9,7 @@ import static utils.Constants.Directions.*;
 public abstract class Enemy {
     private float x, y;
     private Rectangle bounds;
-    private int health;
+    private int health, maxHealth;
     private int id;
     private int enemyType;
     private int lastDir;
@@ -22,10 +22,15 @@ public abstract class Enemy {
         this.enemyType = enemyType;
         bounds = new Rectangle((int) x, (int) y, 32, 32);
         lastDir = -1;
+        setStartHealth();
     }
 
-    protected void setStartHealth(){
+    private void setStartHealth(){
         health = Constants.Enemies.GetStartHealth(enemyType);
+        maxHealth = health;
+    }
+    public float getHealthBarFloat(){
+        return health/(float)maxHealth;
     }
 
     public void move(float speed, int direction) {

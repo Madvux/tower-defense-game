@@ -20,6 +20,7 @@ public class EnemyManager {
     private BufferedImage[] enemyImages;
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private PathPoint start, end;
+    private int HPBarWidth = 20;
 
     public EnemyManager(Playing playing, PathPoint start, PathPoint end) {
         this.playing = playing;
@@ -44,8 +45,8 @@ public class EnemyManager {
     }
 
     public void addEnemy(int enemyType) {
-        int x = start.getX()*32;
-        int y = start.getY()*32;
+        int x = start.getX() * 32;
+        int y = start.getY() * 32;
 
         switch (enemyType) {
             case ORC -> enemies.add(new Orc(x, y, 0));
@@ -71,8 +72,8 @@ public class EnemyManager {
 
         if (e.getLastDir() == -1) setNewDirectionAndMove(e);
 
-        int newX = (int) (e.getX() + getSpeedAndWidth(e.getLastDir(),e.getEnemyType()));
-        int newY = (int) (e.getY() + getSpeedAndHeight(e.getLastDir(),e.getEnemyType()));
+        int newX = (int) (e.getX() + getSpeedAndWidth(e.getLastDir(), e.getEnemyType()));
+        int newY = (int) (e.getY() + getSpeedAndHeight(e.getLastDir(), e.getEnemyType()));
 
         if (getTileType(newX, newY) == ROAD_TILE) {
             e.move(GetSpeed(e.getEnemyType()), e.getLastDir());
@@ -92,12 +93,12 @@ public class EnemyManager {
         if (isAtEnd(e)) return;
 
         if (dir == LEFT || dir == RIGHT) {
-            int newY = (int) (e.getY() + getSpeedAndHeight(UP,e.getEnemyType()));
+            int newY = (int) (e.getY() + getSpeedAndHeight(UP, e.getEnemyType()));
             if (getTileType((int) e.getX(), newY) == ROAD_TILE) e.move(GetSpeed(e.getEnemyType()), UP);
             else e.move(GetSpeed(e.getEnemyType()), DOWN);
 
         } else {
-            int newX = (int) (e.getX() + getSpeedAndWidth(e.getLastDir(),e.getEnemyType()));
+            int newX = (int) (e.getX() + getSpeedAndWidth(e.getLastDir(), e.getEnemyType()));
             if (getTileType(newX, (int) e.getY()) == ROAD_TILE) e.move(GetSpeed(e.getEnemyType()), RIGHT);
             else e.move(GetSpeed(e.getEnemyType()), LEFT);
         }
@@ -116,7 +117,7 @@ public class EnemyManager {
     }
 
     private boolean isAtEnd(Enemy e) {
-        if (e.getX() == end.getX()*32 && e.getY()==end.getY()*32) return true;
+        if (e.getX() == end.getX() * 32 && e.getY() == end.getY() * 32) return true;
         return false;
     }
 
@@ -140,10 +141,19 @@ public class EnemyManager {
 
         for (Enemy e : enemies) {
             drawEnemy(e, g);
+            drawHealthBar(e, g);
         }
 
     }
 
+    private void drawHealthBar(Enemy e, Graphics g) {
+        g.setColor(Color.red);
+        g.fillRect((int) (e.getX()+16 -(getNewBarWidth(e)/2)), (int) (e.getY() - 10),getNewBarWidth(e), 3);
+    }
+
+    private int getNewBarWidth(Enemy e){
+        return (int) (HPBarWidth * e.getHealthBarFloat());
+    }
     private void drawEnemy(Enemy e, Graphics g) {
         g.drawImage(enemyImages[e.getEnemyType()], (int) e.getX(), (int) e.getY(), null);
     }

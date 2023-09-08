@@ -17,15 +17,15 @@ public class Tower {
     }
 
     private void setDefaultCooldown() {
-        Constants.Towers.GetDefaultCooldown(towerType);
+        cooldown = Constants.Towers.GetDefaultCooldown(towerType);
     }
 
     private void setDefaultRange() {
-        Constants.Towers.GetDefaultRange(towerType);
+        range = Constants.Towers.GetDefaultRange(towerType);
     }
 
     private void setDefaultDamage() {
-        Constants.Towers.GetStartDmg(towerType);
+        dmg = Constants.Towers.GetStartDmg(towerType);
     }
 
     public float getDmg() {
