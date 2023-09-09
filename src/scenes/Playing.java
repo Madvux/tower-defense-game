@@ -1,7 +1,9 @@
 package scenes;
 
+import enemies.Enemy;
 import main.Game;
 import managers.EnemyManager;
+import managers.ProjectileManager;
 import managers.TowerManager;
 import objects.PathPoint;
 import objects.Tower;
@@ -21,8 +23,10 @@ public class Playing extends GameScene implements SceneMethods {
     private ActionBar actionBar;
 
     private int mouseX, mouseY;
+
     private EnemyManager enemyManager;
     private TowerManager towerManager;
+    private ProjectileManager projectileManager;
 
     private PathPoint start, end;
     private Tower selectedTower;
@@ -33,6 +37,7 @@ public class Playing extends GameScene implements SceneMethods {
         actionBar = new ActionBar(0, 640, 640, 160, this);
         enemyManager = new EnemyManager(this, start, end);
         towerManager = new TowerManager(this);
+        projectileManager = new ProjectileManager(this);
     }
 
     private void loadDefaultLevel() {
@@ -49,6 +54,8 @@ public class Playing extends GameScene implements SceneMethods {
         actionBar.draw(graphics);
         enemyManager.draw(graphics);
         towerManager.draw(graphics);
+        projectileManager.draw(graphics);
+
         drawSelectedTower(graphics);
         drawHighlight(graphics);
     }
@@ -72,6 +79,7 @@ public class Playing extends GameScene implements SceneMethods {
         updateTick();
         enemyManager.update();
         towerManager.update();
+        projectileManager.update();
     }
 
     private void drawLevel(Graphics graphics) {
@@ -171,5 +179,9 @@ public class Playing extends GameScene implements SceneMethods {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
             setSelectedTower(null);
         }
+    }
+
+    public void shootEnemy(Tower t, Enemy e) {
+        projectileManager.newProjectile(t,e);
     }
 }

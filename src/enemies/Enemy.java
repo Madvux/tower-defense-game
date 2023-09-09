@@ -17,7 +17,6 @@ public abstract class Enemy {
     protected boolean alive = true;
 
 
-
     public Enemy(float x, float y, int id, int enemyType) {
         this.x = x;
         this.y = y;
@@ -28,12 +27,13 @@ public abstract class Enemy {
         setStartHealth();
     }
 
-    private void setStartHealth(){
+    private void setStartHealth() {
         health = Constants.Enemies.GetStartHealth(enemyType);
         maxHealth = health;
     }
-    public float getHealthBarFloat(){
-        return health/(float)maxHealth;
+
+    public float getHealthBarFloat() {
+        return health / (float) maxHealth;
     }
 
     public void move(float speed, int direction) {
@@ -44,8 +44,15 @@ public abstract class Enemy {
             case RIGHT -> this.x += speed;
             case DOWN -> this.y += speed;
         }
+        updateHitbox();
     }
-    public void setPosition(int x,int y){
+
+    private void updateHitbox() {
+        bounds.x = (int) x;
+        bounds.y = (int) y;
+    }
+
+    public void setPosition(int x, int y) {
         //this is for fixing position of enemies
         this.x = x;
         this.y = y;
@@ -78,8 +85,9 @@ public abstract class Enemy {
 
     public void hurt(int dmg) {
         this.health -= dmg;
-        if(health<=0) alive = false;
+        if (health <= 0) alive = false;
     }
+
     public boolean isAlive() {
         return alive;
     }
