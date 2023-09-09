@@ -37,11 +37,11 @@ public class ProjectileManager {
     public void newProjectile(Tower t, Enemy e) {
         int type = getProjectileType(t);
 
-        int xDist = (int) Math.abs(t.getX() - e.getX());
-        int yDist = (int) Math.abs(t.getY() - e.getY());
-        int totalDistance = xDist + yDist;
+        int xDist = (int) (t.getX() - e.getX());
+        int yDist = (int) (t.getY() - e.getY());
+        int totalDistance = Math.abs(xDist) + Math.abs(yDist);
 
-        float xPercent = (float) xDist / totalDistance;
+        float xPercent = (float) Math.abs(xDist) / totalDistance;
 
 
         float xSpeed = xPercent * Constants.Projectiles.GetSpeed(type);
@@ -50,7 +50,15 @@ public class ProjectileManager {
         if (t.getX() > e.getX()) xSpeed *= -1;
         if (t.getY() > e.getY()) ySpeed *= -1;
 
-        projectiles.add(new Projectile(t.getX() + 16, t.getY() + 16, xSpeed, ySpeed, t.getDmg(), projectileID++, type));
+        float arcValue = (float) Math.atan(yDist / (float) xDist);
+        float rotate = (float) Math.toDegrees(arcValue);
+
+        if (xDist < 0) {
+            rotate += 180;
+        }
+
+        projectiles.add(new Projectile(t.getX() + 16, t.getY() + 16,
+                xSpeed, ySpeed, t.getDmg(), rotate, projectileID++, type));
     }
 
     private int getProjectileType(Tower t) {
@@ -90,9 +98,18 @@ public class ProjectileManager {
     }
 
     public void draw(Graphics g) {
+
+        Graphics2D g2d = (Graphics2D) g;
+
         for (Projectile p : projectiles) {
             if (p.isActive()) {
-                g.drawImage(projectileImages[p.getProjectileType()], (int) p.getPos().x, (int) p.getPos().y, null);
+                g2d.translate(p.getPos().x, p.getPos().y);
+                g2d.rotate(Math.toRadians(p.getRotation()));
+
+                g2d.drawImage(projectileImages[p.getProjectileType()], -16, -16, null);
+
+                g2d.rotate(-Math.toRadians(p.getRotation()));
+                g2d.translate(-p.getPos().x, -p.getPos().y);
             }
         }
     }
