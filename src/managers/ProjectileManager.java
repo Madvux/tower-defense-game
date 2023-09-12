@@ -131,6 +131,9 @@ public class ProjectileManager {
             if(e.isAlive()){
                 if (e.getBounds().contains(p.getPos())) {
                     e.hurt(p.getDmg());
+                    if(p.getProjectileType()==CHAINS){
+                        e.slow();
+                    }
                     return true;
                 }
             }
@@ -141,9 +144,6 @@ public class ProjectileManager {
     public void draw(Graphics g) {
 
         Graphics2D g2d = (Graphics2D) g;
-        for (int i = 0; i < explosionImages.length; i++) {
-            g2d.drawImage(explosionImages[i], 300 + i * 32, 300, null);
-        }
 
         for (Projectile p : projectiles) {
             if (p.isActive()) {

@@ -8,13 +8,15 @@ import java.awt.*;
 import static utils.Constants.Directions.*;
 
 public abstract class Enemy {
-    private float x, y;
-    private Rectangle bounds;
-    private int health, maxHealth;
-    private int id;
-    private int enemyType;
-    private int lastDir;
+    protected float x, y;
+    protected Rectangle bounds;
+    protected int health, maxHealth;
+    protected int id;
+    protected int enemyType;
+    protected int lastDir;
     protected boolean alive = true;
+    protected int slowTickLimit =120;
+    protected int slowTick = slowTickLimit;
 
 
     public Enemy(float x, float y, int id, int enemyType) {
@@ -38,6 +40,12 @@ public abstract class Enemy {
 
     public void move(float speed, int direction) {
         lastDir = direction;
+
+        if(isSlowed()){
+            slowTick++;
+            speed *= 0.5f;
+        }
+
         switch (direction) {
             case LEFT -> this.x -= speed;
             case UP -> this.y -= speed;
@@ -87,8 +95,16 @@ public abstract class Enemy {
         this.health -= dmg;
         if (health <= 0) alive = false;
     }
+    public void slow() {
+        slowTick=0;
 
+    }
     public boolean isAlive() {
         return alive;
     }
+    public boolean isSlowed() {
+        return slowTick < slowTickLimit;
+    }
+
+
 }
