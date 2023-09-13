@@ -29,16 +29,16 @@ public class EnemyManager {
         this.end = end;
         loadEffectImage();
         enemyImages = new BufferedImage[4];
-        addEnemy(ORC);
-        addEnemy(BAT);
-        addEnemy(KNIGHT);
-        addEnemy(WOLF);
+//        addEnemy(ORC);
+//        addEnemy(BAT);
+//        addEnemy(KNIGHT);
+//        addEnemy(WOLF);
         loadEnemyImages();
 
     }
 
     private void loadEffectImage() {
-        slowEffect = LoadSave.getSpriteAtlas().getSubimage(32*9,32*2,32,32);
+        slowEffect = LoadSave.getSpriteAtlas().getSubimage(32 * 9, 32 * 2, 32, 32);
     }
 
     private void loadEnemyImages() {
@@ -68,11 +68,29 @@ public class EnemyManager {
     }
 
     public void update() {
-
+        updateWaveManager();
+        if (isTimeForNewEnemy()) spawnEnemy();
         for (Enemy e : enemies) {
-            if(e.isAlive()) updateEnemyMove(e);
+            if (e.isAlive()) updateEnemyMove(e);
 
         }
+    }
+
+    private void updateWaveManager() {
+        playing.getWaveManager().update();
+    }
+
+    private void spawnEnemy() {
+        addEnemy(playing.getWaveManager().getNextEnemy());
+    }
+
+    private boolean isTimeForNewEnemy() {
+        if (playing.getWaveManager().isTimeForNewEnemy()) {
+            if (playing.getWaveManager().isThereMoreEnemiesInWave()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void updateEnemyMove(Enemy e) {
@@ -150,7 +168,7 @@ public class EnemyManager {
             if (e.isAlive()) {
                 drawEnemy(e, g);
                 drawHealthBar(e, g);
-                drawEffects(e,g);
+                drawEffects(e, g);
             }
         }
 
@@ -158,7 +176,7 @@ public class EnemyManager {
 
     private void drawEffects(Enemy e, Graphics g) {
         if (e.isSlowed()) {
-            g.drawImage(slowEffect, (int) e.getX(), (int) e.getY(),null);
+            g.drawImage(slowEffect, (int) e.getX(), (int) e.getY(), null);
         }
     }
 
@@ -168,12 +186,13 @@ public class EnemyManager {
 
     private void drawHealthBar(Enemy e, Graphics g) {
         g.setColor(Color.red);
-        g.fillRect((int) (e.getX()+16 -(getNewBarWidth(e)/2)), (int) (e.getY() - 10),getNewBarWidth(e), 3);
+        g.fillRect((int) (e.getX() + 16 - (getNewBarWidth(e) / 2)), (int) (e.getY() - 10), getNewBarWidth(e), 3);
     }
 
-    private int getNewBarWidth(Enemy e){
+    private int getNewBarWidth(Enemy e) {
         return (int) (HPBarWidth * e.getHealthBarFloat());
     }
+
     private void drawEnemy(Enemy e, Graphics g) {
         g.drawImage(enemyImages[e.getEnemyType()], (int) e.getX(), (int) e.getY(), null);
     }
