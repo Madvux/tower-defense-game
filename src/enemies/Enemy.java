@@ -99,12 +99,17 @@ public abstract class Enemy {
         slowTick=0;
 
     }
+    public void kill() {
+        //kills enemy, when reaches the end;
+        alive = false;
+        health =0;
+
+    }
     public boolean isAlive() {
         return alive;
     }
     public boolean isSlowed() {
         return slowTick < slowTickLimit;
     }
-
 
 }

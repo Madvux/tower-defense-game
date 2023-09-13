@@ -65,7 +65,7 @@ public class Playing extends GameScene implements SceneMethods {
 
     private void drawHighlight(Graphics g) {
         g.setColor(Color.WHITE);
-        g.drawRect(mouseX,mouseY,32,32);
+        g.drawRect(mouseX, mouseY, 32, 32);
     }
 
     public EnemyManager getEnemyManager() {
@@ -80,9 +80,60 @@ public class Playing extends GameScene implements SceneMethods {
 
     public void update() {
         updateTick();
+        waveManager.update();
+
+        if (isAllEnemiesDead()) {
+            if (isThereMoreWaves()) {
+                waveManager.startWaveTimer();
+                if (isWaveTimerOver()) {
+                    waveManager.increaseWaveIndex();
+                    enemyManager.getEnemies().clear();
+                    waveManager.resetEnemyIndex();
+                }
+            }
+        }
+
+        if (isTimeForNewEnemy()) {
+            spawnEnemy();
+        }
         enemyManager.update();
         towerManager.update();
         projectileManager.update();
+    }
+
+    private boolean isWaveTimerOver() {
+        return waveManager.isWaveTimerOver();
+    }
+
+    private boolean isThereMoreWaves() {
+        return waveManager.isThereMoreWaves();
+    }
+
+    private boolean isAllEnemiesDead() {
+        if (waveManager.isThereMoreEnemiesInWave()) {
+            return false;
+        }
+
+        for (Enemy e : enemyManager.getEnemies()) {
+            if (e.isAlive()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void spawnEnemy() {
+        enemyManager.spawnEnemy(waveManager.getNextEnemy());
+    }
+
+    private boolean isTimeForNewEnemy() {
+        if (waveManager.isTimeForNewEnemy()) {
+            if (waveManager.isThereMoreEnemiesInWave()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void drawLevel(Graphics graphics) {
@@ -118,7 +169,7 @@ public class Playing extends GameScene implements SceneMethods {
 
 
     private Tower getTowerAt(int x, int y) {
-        return towerManager.getTowerAt(x,y);
+        return towerManager.getTowerAt(x, y);
     }
 
     private boolean isTileGrass(int x, int y) {
@@ -129,7 +180,7 @@ public class Playing extends GameScene implements SceneMethods {
     }
 
     public void shootEnemy(Tower t, Enemy e) {
-        projectileManager.newProjectile(t,e);
+        projectileManager.newProjectile(t, e);
     }
 
     @Override
@@ -182,7 +233,7 @@ public class Playing extends GameScene implements SceneMethods {
     }
 
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             setSelectedTower(null);
         }
     }

@@ -29,10 +29,6 @@ public class EnemyManager {
         this.end = end;
         loadEffectImage();
         enemyImages = new BufferedImage[4];
-//        addEnemy(ORC);
-//        addEnemy(BAT);
-//        addEnemy(KNIGHT);
-//        addEnemy(WOLF);
         loadEnemyImages();
 
     }
@@ -50,6 +46,10 @@ public class EnemyManager {
 
     }
 
+    public void spawnEnemy(int nextEnemy) {
+        addEnemy(nextEnemy);
+    }
+
     public void addEnemy(int enemyType) {
         int x = start.getX() * 32;
         int y = start.getY() * 32;
@@ -64,34 +64,15 @@ public class EnemyManager {
             case WOLF -> enemies.add(new Wolf(x, y, 0));
 
         }
-
     }
 
     public void update() {
-        updateWaveManager();
-        if (isTimeForNewEnemy()) spawnEnemy();
         for (Enemy e : enemies) {
             if (e.isAlive()) updateEnemyMove(e);
 
         }
     }
 
-    private void updateWaveManager() {
-        playing.getWaveManager().update();
-    }
-
-    private void spawnEnemy() {
-        addEnemy(playing.getWaveManager().getNextEnemy());
-    }
-
-    private boolean isTimeForNewEnemy() {
-        if (playing.getWaveManager().isTimeForNewEnemy()) {
-            if (playing.getWaveManager().isThereMoreEnemiesInWave()) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public void updateEnemyMove(Enemy e) {
 
@@ -103,7 +84,7 @@ public class EnemyManager {
         if (getTileType(newX, newY) == ROAD_TILE) {
             e.move(GetSpeed(e.getEnemyType()), e.getLastDir());
         } else if (isAtEnd(e)) {
-            System.out.println("Ouch");
+            e.kill();
         } else {
             setNewDirectionAndMove(e);
         }
@@ -195,5 +176,14 @@ public class EnemyManager {
 
     private void drawEnemy(Enemy e, Graphics g) {
         g.drawImage(enemyImages[e.getEnemyType()], (int) e.getX(), (int) e.getY(), null);
+    }
+
+    public int getAmountOfAliveEnemies() {
+        int size = 0;
+        for (Enemy e : enemies) {
+            if (e.isAlive()) size++;
+        }
+
+        return size;
     }
 }
