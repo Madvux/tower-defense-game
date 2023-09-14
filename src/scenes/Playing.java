@@ -9,6 +9,7 @@ import managers.WaveManager;
 import objects.PathPoint;
 import objects.Tower;
 import ui.ActionBar;
+import utils.Constants;
 import utils.LoadSave;
 
 import java.awt.*;
@@ -32,6 +33,7 @@ public class Playing extends GameScene implements SceneMethods {
 
     private PathPoint start, end;
     private Tower selectedTower;
+    private int goldTick;
 
     public Playing(Game game) {
         super(game);
@@ -82,6 +84,11 @@ public class Playing extends GameScene implements SceneMethods {
         updateTick();
         waveManager.update();
 
+        // Gold tick
+        goldTick++;
+        if (goldTick % (60 * 3) == 0)
+            actionBar.addGold(1);
+        
         if (isAllEnemiesDead()) {
             if (isThereMoreWaves()) {
                 waveManager.startWaveTimer();
@@ -157,6 +164,7 @@ public class Playing extends GameScene implements SceneMethods {
                 if (isTileGrass(mouseX, mouseY)) {
                     if (getTowerAt(mouseX, mouseY) == null) {
                         towerManager.addTower(selectedTower, mouseX, mouseY);
+                        removeGold(selectedTower.getTowerType());
                         selectedTower = null;
                     }
                 }
@@ -165,6 +173,10 @@ public class Playing extends GameScene implements SceneMethods {
                 actionBar.displayTower(t);
             }
         }
+    }
+
+    private void removeGold(int towerType) {
+        actionBar.payForTower(towerType);
     }
 
 
@@ -237,7 +249,9 @@ public class Playing extends GameScene implements SceneMethods {
             setSelectedTower(null);
         }
     }
-
+    public void rewardPlayer(int enemyType){
+        actionBar.addGold(Constants.Enemies.GetReward(enemyType));
+    }
 
     public WaveManager getWaveManager() {
         return waveManager;

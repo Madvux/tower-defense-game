@@ -55,13 +55,13 @@ public class EnemyManager {
         int y = start.getY() * 32;
 
         switch (enemyType) {
-            case ORC -> enemies.add(new Orc(x, y, 0));
+            case ORC -> enemies.add(new Orc(x, y, 0,this));
 
-            case BAT -> enemies.add(new Bat(x, y, 0));
+            case BAT -> enemies.add(new Bat(x, y, 0,this));
 
-            case KNIGHT -> enemies.add(new Knight(x, y, 0));
+            case KNIGHT -> enemies.add(new Knight(x, y, 0,this));
 
-            case WOLF -> enemies.add(new Wolf(x, y, 0));
+            case WOLF -> enemies.add(new Wolf(x, y, 0,this));
 
         }
     }
@@ -185,5 +185,9 @@ public class EnemyManager {
         }
 
         return size;
+    }
+
+    public void rewardPlayer(int enemyType) {
+        playing.rewardPlayer(enemyType);
     }
 }
