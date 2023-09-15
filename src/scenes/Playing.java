@@ -256,4 +256,13 @@ public class Playing extends GameScene implements SceneMethods {
     public WaveManager getWaveManager() {
         return waveManager;
     }
+
+    public void upgradeTower(Tower displayedTower) {
+        towerManager.upgradeTower(displayedTower);
+
+    }
+
+    public void removeTower(Tower displayedTower) {
+        towerManager.removeTower(displayedTower);
+    }
 }

@@ -2,8 +2,10 @@ package objects;
 
 import utils.Constants;
 
+import static utils.Constants.Towers.*;
+
 public class Tower {
-    private int x, y, id,dmg, towerType, cdTick;
+    private int x, y, id, dmg, towerType, cdTick, tier;
     private float range, cooldown;
 
     public Tower(int x, int y, int id, int towerType) {
@@ -18,6 +20,27 @@ public class Tower {
 
     public void update() {
         cdTick++;
+    }
+
+    public void upgradeTower() {
+        this.tier++;
+
+        switch (towerType) {
+            case ARCHER -> {
+                dmg += 2;
+                range += 20;
+                cooldown -= 5;
+            }
+            case CANNON -> {
+                dmg += 5;
+                range += 20;
+                cooldown -= 15;
+            }
+            case WIZARD -> {
+                range += 20;
+                cooldown -= 10;
+            }
+        }
     }
 
     public boolean isCooldownOver() {
@@ -84,5 +107,7 @@ public class Tower {
         this.towerType = towerType;
     }
 
-
+    public int getTier() {
+        return tier;
+    }
 }
