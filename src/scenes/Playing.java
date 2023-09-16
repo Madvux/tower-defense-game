@@ -82,7 +82,7 @@ public class Playing extends GameScene implements SceneMethods {
     }
 
     public void update() {
-        if(!gamePaused) {
+        if (!gamePaused) {
             updateTick();
             waveManager.update();
 
@@ -252,7 +252,8 @@ public class Playing extends GameScene implements SceneMethods {
             setSelectedTower(null);
         }
     }
-    public void rewardPlayer(int enemyType){
+
+    public void rewardPlayer(int enemyType) {
         actionBar.addGold(Constants.Enemies.GetReward(enemyType));
     }
 
@@ -275,5 +276,27 @@ public class Playing extends GameScene implements SceneMethods {
 
     public void removeTower(Tower displayedTower) {
         towerManager.removeTower(displayedTower);
+    }
+
+    public void removeOneLife() {
+        actionBar.removeOneLife();
+    }
+
+    public void resetEverything() {
+
+        actionBar.resetEverything();
+
+        enemyManager.reset();
+        towerManager.reset();
+        projectileManager.reset();
+        waveManager.reset();
+
+        mouseX = 0;
+        mouseY = 0;
+
+        selectedTower = null;
+        goldTick = 0;
+        gamePaused = false;
+
     }
 }

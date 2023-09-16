@@ -101,15 +101,18 @@ public class ProjectileManager {
                         explosions.add(new Explosion(p.getPos()));
                         explodeOnEnemies(p);
                     }
+                } else if (isProjectileOutsideBounds(p)) {
+                    p.setActive(false);
                 }
             }
         }
         for (Explosion e : explosions) {
-            if(e.getIndex() < explosionImages.length){
+            if (e.getIndex() < explosionImages.length) {
                 e.update();
             }
         }
     }
+
 
     private void explodeOnEnemies(Projectile p) {
         for (Enemy e : playing.getEnemyManager().getEnemies()) {
@@ -126,12 +129,25 @@ public class ProjectileManager {
         }
     }
 
+    private boolean isProjectileOutsideBounds(Projectile p) {
+        if (p.getPos().x >= 0) {
+            if (p.getPos().x <= 640) {
+                if (p.getPos().y >= 0) {
+                    if (p.getPos().y <= 800){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     private boolean isProjectileHittingEnemy(Projectile p) {
         for (Enemy e : playing.getEnemyManager().getEnemies()) {
-            if(e.isAlive()){
+            if (e.isAlive()) {
                 if (e.getBounds().contains(p.getPos())) {
                     e.hurt(p.getDmg());
-                    if(p.getProjectileType()==CHAINS){
+                    if (p.getProjectileType() == CHAINS) {
                         e.slow();
                     }
                     return true;
@@ -170,6 +186,12 @@ public class ProjectileManager {
                 g2d.drawImage(explosionImages[e.getIndex()], (int) (e.getPosition().x - 16), (int) (e.getPosition().y - 16), null);
             }
         }
+    }
+
+    public void reset() {
+        projectiles.clear();
+        explosions.clear();
+        projectileID =0;
     }
 
     public class Explosion {

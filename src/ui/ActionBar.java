@@ -8,6 +8,8 @@ import utils.Constants;
 import java.awt.*;
 import java.text.DecimalFormat;
 
+import static main.GameStates.GAME_OVER;
+
 public class ActionBar extends Bar {
 
     private Playing playing;
@@ -20,6 +22,9 @@ public class ActionBar extends Bar {
     private int gold = 100;
     private boolean showTowerCost;
     private int towerCostType;
+
+    private int lives = 10;
+
 
     private DecimalFormat formatter;
 
@@ -75,10 +80,13 @@ public class ActionBar extends Bar {
         if (showTowerCost)
             drawTowerCost(graphics);
 
-        if(playing.isGamePaused()){
+        if (playing.isGamePaused()) {
             graphics.setColor(Color.BLACK);
-            graphics.drawString("Game is Paused!",110,790);
+            graphics.drawString("Game is Paused!", 110, 790);
         }
+
+        graphics.setColor(Color.BLACK);
+        graphics.drawString("Lives: " + lives, 110, 750);
     }
 
     private void drawTowerCost(Graphics g) {
@@ -220,6 +228,7 @@ public class ActionBar extends Bar {
         gold -= getUpgradeAmount(displayTower);
 
     }
+
     private void togglePause() {
         playing.setGamePaused(!playing.isGamePaused());
 
@@ -230,10 +239,12 @@ public class ActionBar extends Bar {
         }
 
     }
+
     public void mouseClicked(int x, int y) {
         if (bMenu.getBounds().contains(x, y)) {
             GameStates.setGameState(GameStates.MENU);
-        } if (bPause.getBounds().contains(x, y)) {
+        }
+        if (bPause.getBounds().contains(x, y)) {
             togglePause();
         } else {
             if (displayTower != null) {
@@ -258,7 +269,6 @@ public class ActionBar extends Bar {
             }
         }
     }
-
 
 
     private boolean isGoldEnoughForTower(int towerType) {
@@ -347,5 +357,25 @@ public class ActionBar extends Bar {
 
     public void displayTower(Tower t) {
         displayTower = t;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void removeOneLife() {
+        lives--;
+        if (lives <= 0) {
+            GameStates.setGameState(GAME_OVER);
+        }
+    }
+
+    public void resetEverything() {
+        lives = 10;
+        towerCostType = 0;
+        showTowerCost = false;
+        gold = 100;
+        selectedTower = null;
+        displayTower = null;
     }
 }

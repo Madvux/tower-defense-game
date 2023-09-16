@@ -85,6 +85,7 @@ public class EnemyManager {
             e.move(GetSpeed(e.getEnemyType()), e.getLastDir());
         } else if (isAtEnd(e)) {
             e.kill();
+            playing.removeOneLife();
         } else {
             setNewDirectionAndMove(e);
         }
@@ -189,5 +190,9 @@ public class EnemyManager {
 
     public void rewardPlayer(int enemyType) {
         playing.rewardPlayer(enemyType);
+    }
+
+    public void reset() {
+        enemies.clear();
     }
 }
