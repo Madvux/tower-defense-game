@@ -34,6 +34,7 @@ public class Playing extends GameScene implements SceneMethods {
     private PathPoint start, end;
     private Tower selectedTower;
     private int goldTick;
+    private boolean gamePaused;
 
     public Playing(Game game) {
         super(game);
@@ -81,31 +82,33 @@ public class Playing extends GameScene implements SceneMethods {
     }
 
     public void update() {
-        updateTick();
-        waveManager.update();
+        if(!gamePaused) {
+            updateTick();
+            waveManager.update();
 
-        // Gold tick
-        goldTick++;
-        if (goldTick % (60 * 3) == 0)
-            actionBar.addGold(1);
-        
-        if (isAllEnemiesDead()) {
-            if (isThereMoreWaves()) {
-                waveManager.startWaveTimer();
-                if (isWaveTimerOver()) {
-                    waveManager.increaseWaveIndex();
-                    enemyManager.getEnemies().clear();
-                    waveManager.resetEnemyIndex();
+            // Gold tick
+            goldTick++;
+            if (goldTick % (60 * 3) == 0)
+                actionBar.addGold(1);
+
+            if (isAllEnemiesDead()) {
+                if (isThereMoreWaves()) {
+                    waveManager.startWaveTimer();
+                    if (isWaveTimerOver()) {
+                        waveManager.increaseWaveIndex();
+                        enemyManager.getEnemies().clear();
+                        waveManager.resetEnemyIndex();
+                    }
                 }
             }
-        }
 
-        if (isTimeForNewEnemy()) {
-            spawnEnemy();
+            if (isTimeForNewEnemy()) {
+                spawnEnemy();
+            }
+            enemyManager.update();
+            towerManager.update();
+            projectileManager.update();
         }
-        enemyManager.update();
-        towerManager.update();
-        projectileManager.update();
     }
 
     private boolean isWaveTimerOver() {
@@ -260,6 +263,14 @@ public class Playing extends GameScene implements SceneMethods {
     public void upgradeTower(Tower displayedTower) {
         towerManager.upgradeTower(displayedTower);
 
+    }
+
+    public void setGamePaused(boolean gamePaused) {
+        this.gamePaused = gamePaused;
+    }
+
+    public boolean isGamePaused() {
+        return gamePaused;
     }
 
     public void removeTower(Tower displayedTower) {

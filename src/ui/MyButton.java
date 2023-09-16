@@ -91,6 +91,10 @@ public class MyButton {
         return bounds;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public void resetBooleans() {
         this.mouseOver = false;
         this.mousePressed = false;
